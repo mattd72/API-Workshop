@@ -1,4 +1,4 @@
-Lab One - Creating an API
+Lab four - API Management
 ===
 
 ### Connecting your Customers API to 3scale API Management
@@ -365,4 +365,3 @@ Liquid is a simple programming language used for displaying and processing most 
     The *HTTP/1.1 403 Forbidden* response code indicates that our user_key was wrong or we don't have permisson to access this API endpoint.
 
 3. You have sucessfully configured 3scale API Management and Gateway to access your API.
-
