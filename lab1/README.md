@@ -39,86 +39,8 @@ Before provisioning an on-premise API gateway environment, you will want to chec
 
     > **Note:** Don't forget to copy your token into a safe place as this is the only point where you'll be able to view it. If you fail to do so, you can always create a new access token.
     
-### Step 1: Deploy APIcast using the OpenShift template
 
-
-1. By default you are logged in as *developer* and can proceed to the next step.
-
-    Otherwise login into OpenShift using the `oc login` command from the OpenShift Client tools you downloaded and installed in the previous step. The default login credentials are *username = "developer"* and *password = "developer"*:
-
-    ```
-    oc login https://<OPENSHIFT-SERVER-IP>:8443 -u developer
-    ```
-
-    You should see Login successful. in the output.
-
-2. Create a new secret to reference your admin portal configuration.
-
-    ```
-    oc secret new-basicauth apicast-configuration-url-secret --password=https://<ACCESS_TOKEN>@<DOMAIN>-admin.3scale.net
-    ```
-
-    Here **&lt;ACCESS_TOKEN&gt;** is an Access Token (not a Service Token) for the 3scale Account Management API, and **&lt;DOMAIN&gt;-admin.3scale.net** is the URL of your 3scale Admin Portal.
-
-    > **Note:** You got this access token and domain in the Pre-Reqs section.
-
-    The response should look like this:
-
-    ```
-    secret/apicast-configuration-url-secret
-    ```
-
-3. Create an application for your APIcast Gateway from the template, and start the deployment:
-
-    ```
-    oc new-app -f https://raw.githubusercontent.com/3scale/3scale-amp-openshift-templates/2.0.0.GA-redhat-2/apicast-gateway/apicast.yml
-    ```
-
-    You should see the following messages at the bottom of the output:
-
-    ```
-    --> Creating resources ...
-      deploymentconfig "apicast" created
-      service "apicast" created
-    --> Success
-      Run 'oc status' to view your app.
-    ```
-
-
-4. In *myfuseproject* and you will see the *Overview* tab.
-
-    Each APIcast instance, upon starting, downloads the required configuration from 3scale using the settings you provided on the **Integration** page of your 3scale Admin Portal. In order to allow your APIcast instances to receive traffic, you'll need to create a route. Start by clicking on **Create Route**.
-
-    ![20-openshift-create-route.png](./img/20-openshift-create-route.png)
-
-    Enter the same host you set in 3scale above in the section **Staging Public Base URL** (without the http:// and without the port), in this lab's step 1: `customer-api-staging.<OPENSHIFT-SERVER-IP>.nip.io`, then click the **Create** button.
-
-    ![21-openshift-route-config.png](./img/21-openshift-route-config.png)
-
-1. Now add the production route. This time select `Applications -> Routes` from the left options.
-
-    ![22-applications-routes.png](./img/22-applications-routes.png)
-
-1. Click on the `Create Route` button.
-
-    ![23-create-route.png](./img/23-create-route.png)
-
-1. Fill in the information.
-
-    **Name:** `apicast-production`
-
-    **Hostname:** `customer-api-production.<OPENSHIFT-SERVER-IP>.nip.io`
-
-    ![24-production-route.png](./img/24-production-route.png)
-
-1. Click on the `Create` button in the botton of the page to save the production route.
-
-    Your API Gateways are now ready to receive traffic. OpenShift takes care of load-balancing incoming requests to the route across the two running APIcast instances.
-
-    If you wish to see the APIcast logs, you can do so by clicking **Applications > Pods**, selecting one of the pods and finally selecting **Logs**.
-
-
-### Step 2: Define your API
+### Step 1: Define your API
 
 Your 3scale Admin Portal (http://&lt;YOURDOMAIN&gt;-admin.3scale.net) provides access to a number of configuration features.
 
