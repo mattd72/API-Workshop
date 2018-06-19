@@ -1,4 +1,4 @@
-Lab four - API Management
+Lab One - Creating an API
 ===
 
 ### Connecting your Customers API to 3scale API Management
